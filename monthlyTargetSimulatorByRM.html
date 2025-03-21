@@ -1,0 +1,118 @@
+<template>
+    <lightning-card icon-name="custom:custom67" title="Target Simulator">
+        <div class="card-container">
+            <template if:true={loaded}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>      
+            <div class="slds-box slds-p-top_small" style="background-color: white;">
+                <!-- <div class="slds-text-heading_medium"> Monthly Target</div> <br /> -->
+                <div class="slds-size_3-of-3">
+                    <div class="slds-card__body slds-card__body_inner mrg-bottom-20">
+                        <lightning-layout horizontal-align="center" vertical-align="end" class="slds-form " data-id="layout-container">
+                            <lightning-layout-item size="2">
+                                <lightning-combobox name="Region__c" class="mrg-right-10" label="Region"
+                                    value={selectedRegion} placeholder="Select Region" data-id="Region__c"
+                                    required="true" onchange={handleComboChange}
+                                    options={regionOptions}></lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2">
+                                <lightning-combobox name="Segment__c" class="mrg-right-10" label="Segment"
+                                    value={selectedSegment} placeholder="Select Segment" data-id="Segment__c"
+                                    required="true" onchange={handleComboChange}
+                                    options={segmentOptions}></lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2">
+                                <lightning-combobox name="Year__c" class="mrg-right-10" label="Year"
+                                    value={selectedYear} placeholder="Select Year" data-id="Year__c" required="true"
+                                    onchange={handleComboChange} options={yearOptions}></lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2">
+                                <lightning-combobox name="Month__c" class="mrg-right-10" label="Month"
+                                    value={selectedMonth} placeholder="Select Month" data-id="Month__c" required="true"
+                                    onchange={handleComboChange} options={monthOptions}></lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="3">
+                                <lightning-button variant="brand-outline" label="Go" icon-name="utility:record_lookup"
+                                    onclick={fetchActualTargetRows}></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </div>
+                <div class="slds-size_2-of-3">
+                    <div class="slds-card__body slds-card__body_inner">
+                        <div if:true={datatable}>
+                            <table
+                                class="slds-table slds-table_bordered slds-table_cell-buffer slds-var-m-bottom_large">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th rowspan="2"><div class="slds-truncate">Product Name</div></th>
+                                        <th colspan="3">
+                                            <div class="slds-truncate">Monthly Target</div>
+                                        </th>
+                                        <th colspan="3">
+                                            <div class="slds-truncate">Target Simulator</div>
+                                        </th>                                        
+                                    </tr>
+                                    <tr class="slds-text-title_caps">
+                                        <template for:each={columns} for:item="column">
+                                            <th key={column.fieldName} data-class={column.styleClass}>
+                                                <div class="slds-truncate">{column.label}</div>
+                                            </th>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={processedRows} for:item="row" for:index="index">
+                                        <tr class="inputRows" key={row.uuid}>
+                                            <td>
+                                                {row.Product__c}
+                                            </td>
+                                            <td>
+                                                {row.Initial_Target__c}
+                                            </td> 
+                                            <td>
+                                                {row.Price__c}
+                                            </td>
+                                            <td>
+                                                {row.Initial_R05__c}
+                                            </td>
+                                            <td>
+                                                <lightning-input type='number' variant="label-hidden" placeholder="0"
+                                                    name=Actual_Target{index} data-id={index} data-row-index={index}
+                                                    value={row.Actual_Target__c}
+                                                    onchange={handleActualTargetChange}></lightning-input>
+                                            </td>   
+                                            <td>
+                                                {row.Price__c}
+                                            </td>                                         
+                                            <td>
+                                                <lightning-formatted-number value={row.Actual_R05__c} maximum-fraction-digits="2"></lightning-formatted-number>
+                                                <!-- <lightning-input type='input' variant="label-hidden" read-only
+                                                    name=Actual_R05{index} data-id={index} data-row-index={index}
+                                                    value={row.Actual_R05__c} is-loading></lightning-input> -->
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+
+                            <div class="slds-clearfix" style="margin-right: 3%">
+                                <div class="slds-float_right">
+                                    <lightning-button-group>
+                                        <lightning-button variant="brand-outline" label="Submit Target"
+                                            icon-name="utility:package_org"
+                                            onclick={submitMonthlyTarget}></lightning-button>
+
+                                    </lightning-button-group>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div if:true={error} class="slds-text-color_destructive">
+                    <b>{submitError}</b>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>
