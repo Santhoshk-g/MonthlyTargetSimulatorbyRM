@@ -1,0 +1,48 @@
+.card-container{
+    margin: auto 1%;
+}
+.separator-here {
+    color: #ccc;
+    width: 70%;
+    margin: 20px auto;
+    overflow: hidden;
+    text-align: center;
+    line-height: 50px;
+}
+
+.separator-here:before,
+.separator-here:after {
+    content: "";
+    vertical-align: middle;
+    display: inline-block;
+    width: 50%;
+    border-bottom: 2px dotted #ccc;
+    margin: 0 2% 0 -55%;
+}
+
+.separator-here:after {
+    margin: 0 -55% 0 2%;
+}
+.mrg-right-10{
+    /* margin-right: 10px; */
+    width: 80%;
+}
+.mrg-bottom-20{
+    margin-bottom: 20px;
+}
+.alignCenter{
+    align-items: center;
+}
+.slds-table {
+    border: 1px solid #e5e5e5;
+}
+.slds-table thead th{
+    line-height: 30px;
+    text-align: center;
+}
+.slds-table tr th,.slds-table tr td{
+    border-right: 1px solid #e5e5e5;
+}
+th[data-class='hideHeader']{
+    display: none;
+}
